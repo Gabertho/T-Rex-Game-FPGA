@@ -112,11 +112,11 @@ A renderização não utiliza uma biblioteca gráfica tradicional. Em vez disso,
 
 -   **Gameplay**: Renderiza o jogo em tempo real. [cite_start]A pontuação é exibida no canto superior esquerdo usando a função `video_text`, que escreve caracteres no buffer de texto da FPGA. [cite: 1]
 
-    ![Gameplay](figs/gameplay.jpg.png)
+    ![Gameplay](figs/gameplay.jpg)
 
 -   [cite_start]**Tela de "Game Over"**: Quando ocorre uma colisão, o loop de gameplay é interrompido. [cite: 1] [cite_start]A tela é limpa e uma caixa de diálogo é desenhada, mostrando a mensagem "GAME OVER!", a pontuação final e a instrução para reiniciar o jogo pressionando `KEY1`. [cite: 1]
 
-    ![Game Over](figs/gameover.jpg.png)
+    ![Game Over](figs/gameover.jpg)
 
 ---
 
