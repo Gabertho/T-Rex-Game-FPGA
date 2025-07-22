@@ -67,8 +67,8 @@ while (1) {
 
 A renderização não utiliza uma biblioteca gráfica tradicional. Em vez disso, as funções de desenho escrevem diretamente na memória de vídeo da FPGA.
 
--   **`video_box(x1, y1, x2, y2, color)`**: Função de baixo nível mais importante. [cite_start]Ela desenha um retângulo preenchido na tela, escrevendo um valor de cor (`short pixel_color`) para cada pixel dentro das coordenadas especificadas no buffer de pixels. [cite: 1]
--   [cite_start]**Sprites e Bitmaps**: Personagens como o dinossauro (`draw_dino`), cactos (`draw_obstacle`), pássaros (`draw_bird`) e o logo inicial (`draw_logo`) são desenhados a partir de matrizes `const unsigned char` (bitmaps). [cite: 1] [cite_start]Cada `1` na matriz representa um pixel a ser desenhado pela função `video_box`. [cite: 1] [cite_start]O movimento dos sprites é simulado alternando entre dois bitmaps (ex: `dino1` e `dino2`) a cada `N` frames. [cite: 1]
+-   **`video_box(x1, y1, x2, y2, color)`**: Função de baixo nível mais importante. Ela desenha um retângulo preenchido na tela, escrevendo um valor de cor (`short pixel_color`) para cada pixel dentro das coordenadas especificadas no buffer de pixels. 
+-   **Sprites e Bitmaps**: Personagens como o dinossauro (`draw_dino`), cactos (`draw_obstacle`), pássaros (`draw_bird`) e o logo inicial (`draw_logo`) são desenhados a partir de matrizes `const unsigned char` (bitmaps).  Cada `1` na matriz representa um pixel a ser desenhado pela função `video_box`.  O movimento dos sprites é simulado alternando entre dois bitmaps (ex: `dino1` e `dino2`) a cada `N` frames. 
 
     ```c
     // Exemplo de bitmap do dinossauro
@@ -90,31 +90,31 @@ A renderização não utiliza uma biblioteca gráfica tradicional. Em vez disso,
     }
     ```
 
--   [cite_start]**Geração Procedural**: Elementos como o chão (`draw_ground`), nuvens (`draw_cloud`), estrelas (`draw_stars`), sol (`draw_sun`) e lua (`draw_moon`) são desenhados proceduralmente, usando a função `video_box` e números aleatórios para criar variedade e uma aparência mais orgânica. [cite: 1]
+-   **Geração Procedural**: Elementos como o chão (`draw_ground`), nuvens (`draw_cloud`), estrelas (`draw_stars`), sol (`draw_sun`) e lua (`draw_moon`) são desenhados proceduralmente, usando a função `video_box` e números aleatórios para criar variedade e uma aparência mais orgânica. 
 
 ### 2.4. Lógica do Jogo e Interação
 
--   [cite_start]**Controle do Jogador**: O pulo do dinossauro é ativado pela leitura direta do registrador `KEY_BASE`. [cite: 1] [cite_start]Se o botão `KEY0` é pressionado (`(*key_ptr & 0x1) != 0`), a variável de estado `dino_jump_state` é alterada, iniciando a animação de pulo, que segue uma trajetória parabólica simples gerenciada pelo `jump_counter`. [cite: 1]
+-   **Controle do Jogador**: O pulo do dinossauro é ativado pela leitura direta do registrador `KEY_BASE`.  Se o botão `KEY0` é pressionado (`(*key_ptr & 0x1) != 0`), a variável de estado `dino_jump_state` é alterada, iniciando a animação de pulo, que segue uma trajetória parabólica simples gerenciada pelo `jump_counter`. 
 
--   [cite_start]**Movimento dos Obstáculos**: Os obstáculos e pássaros se movem da direita para a esquerda. [cite: 1] [cite_start]Suas posições (`obstacle_x`, `bird_x`) são decrementadas a cada frame pela variável `current_speed`. [cite: 1] [cite_start]Quando um obstáculo sai da tela, sua posição é reiniciada para a direita, fora da tela, com uma distância aleatória, criando um fluxo infinito de desafios. [cite: 1]
+-   **Movimento dos Obstáculos**: Os obstáculos e pássaros se movem da direita para a esquerda.  Suas posições (`obstacle_x`, `bird_x`) são decrementadas a cada frame pela variável `current_speed`.  Quando um obstáculo sai da tela, sua posição é reiniciada para a direita, fora da tela, com uma distância aleatória, criando um fluxo infinito de desafios. 
 
--   [cite_start]**Detecção de Colisão**: A função `check_collision` implementa uma detecção de colisão baseada em *Bounding Box* (AABB - Axis-Aligned Bounding Box). [cite: 1] [cite_start]Ela verifica se os retângulos que envolvem o dinossauro e os obstáculos se sobrepõem. [cite: 1]
+-   **Detecção de Colisão**: A função `check_collision` implementa uma detecção de colisão baseada em *Bounding Box* (AABB - Axis-Aligned Bounding Box).  Ela verifica se os retângulos que envolvem o dinossauro e os obstáculos se sobrepõem. 
 
--   [cite_start]**Pontuação e Dificuldade**: A pontuação (`score`) é incrementada com base no `frame_counter`. [cite: 1] [cite_start]A velocidade do jogo (`current_speed`) aumenta gradualmente conforme a pontuação sobe, tornando o desafio progressivamente mais difícil. [cite: 1]
+-   **Pontuação e Dificuldade**: A pontuação (`score`) é incrementada com base no `frame_counter`.  A velocidade do jogo (`current_speed`) aumenta gradualmente conforme a pontuação sobe, tornando o desafio progressivamente mais difícil. 
 
--   [cite_start]**Ciclo Dia/Noite**: A variável `night_mode` é alternada com base na pontuação (`(score / 50) % 2`). [cite: 1] [cite_start]Quando ativada, as funções de desenho utilizam uma paleta de cores diferente: o fundo fica escuro, o sol é substituído pela lua e estrelas aparecem no céu. [cite: 1]
+-   **Ciclo Dia/Noite**: A variável `night_mode` é alternada com base na pontuação (`(score / 50) % 2`).  Quando ativada, as funções de desenho utilizam uma paleta de cores diferente: o fundo fica escuro, o sol é substituído pela lua e estrelas aparecem no céu. 
 
 ### 2.5. Telas e Interface
 
--   [cite_start]**Tela de Início**: Exibe um logo estilizado (desenhado com `draw_logo`), o título do jogo e aguarda o jogador pressionar `KEY1` para iniciar a partida. [cite: 1]
+-   **Tela de Início**: Exibe um logo estilizado (desenhado com `draw_logo`), o título do jogo e aguarda o jogador pressionar `KEY1` para iniciar a partida. 
 
     ![Tela de Início](figs/tela_inicio.jpg)
 
--   **Gameplay**: Renderiza o jogo em tempo real. [cite_start]A pontuação é exibida no canto superior esquerdo usando a função `video_text`, que escreve caracteres no buffer de texto da FPGA. [cite: 1]
+-   **Gameplay**: Renderiza o jogo em tempo real. A pontuação é exibida no canto superior esquerdo usando a função `video_text`, que escreve caracteres no buffer de texto da FPGA. 
 
     ![Gameplay](figs/gameplay.jpg)
 
--   [cite_start]**Tela de "Game Over"**: Quando ocorre uma colisão, o loop de gameplay é interrompido. [cite: 1] [cite_start]A tela é limpa e uma caixa de diálogo é desenhada, mostrando a mensagem "GAME OVER!", a pontuação final e a instrução para reiniciar o jogo pressionando `KEY1`. [cite: 1]
+-   **Tela de "Game Over"**: Quando ocorre uma colisão, o loop de gameplay é interrompido.  A tela é limpa e uma caixa de diálogo é desenhada, mostrando a mensagem "GAME OVER!", a pontuação final e a instrução para reiniciar o jogo pressionando `KEY1`. 
 
     ![Game Over](figs/gameover.jpg)
 
@@ -127,7 +127,7 @@ Para compilar e rodar este projeto, é necessário o ambiente de desenvolvimento
 ### 3.1. Pré-requisitos
 
 -   **Hardware**:
-    -   [cite_start]Placa Terasic DE10-Standard. [cite: 10]
+    -   Placa Terasic DE10-Standard. 
     -   Cabo USB-Blaster para conexão com o PC.
     -   Monitor com entrada VGA.
     -   Fonte de alimentação para a placa.
@@ -144,22 +144,22 @@ Para compilar e rodar este projeto, é necessário o ambiente de desenvolvimento
 2.  **Abra o Projeto no Monitor Program**:
     -   Inicie o `Intel FPGA Monitor Program`.
     -   Vá em `File > Open Project...`.
-    -   Selecione o arquivo `Projeto1.amp`. [cite_start]Este arquivo contém todas as configurações do projeto, como a arquitetura do processador (`ARM Cortex-A9` [cite: 10][cite_start]), a placa alvo (`DE10-Standard` [cite: 10][cite_start]), os arquivos fonte [cite: 11] [cite_start]e as configurações do linker[cite: 12, 13].
+    -   Selecione o arquivo `Projeto1.amp`. Este arquivo contém todas as configurações do projeto, como a arquitetura do processador (`ARM Cortex-A9` ), a placa alvo (`DE10-Standard` ), os arquivos fonte  e as configurações do linker.
 
 3.  **Compile o Código**:
     -   No Monitor Program, certifique-se de que o painel "Program" está visível.
     -   Clique no ícone de compilação (que se assemelha a uma engrenagem ou martelo) ou vá em `Actions > Compile`.
-    -   [cite_start]O Monitor Program usará o `makefile` fornecido para invocar o compilador `arm-altera-eabi-gcc` com as flags especificadas (`-g -O1`). [cite: 11]
+    -   O Monitor Program usará o `makefile` fornecido para invocar o compilador `arm-altera-eabi-gcc` com as flags especificadas (`-g -O1`). 
     -   Este processo irá gerar os arquivos objeto (`.o`), e finalmente, o arquivo executável `video.axf` e o arquivo de imagem de memória no formato SREC, `video.srec`.
 
 4.  **Carregue e Execute o Programa**:
     -   Após a compilação bem-sucedida, clique no ícone de "Download" (seta para baixo) ou vá em `Actions > Load`.
-    -   [cite_start]O Monitor Program irá carregar o arquivo `video.srec` para a memória DDR3 da placa, nos endereços base especificados no arquivo de projeto (`0x00000000`). [cite: 12]
+    -   O Monitor Program irá carregar o arquivo `video.srec` para a memória DDR3 da placa, nos endereços base especificados no arquivo de projeto (`0x00000000`).
     -   Após o carregamento, o programa começará a ser executado automaticamente. A tela de início do jogo deverá aparecer no monitor VGA.
 
 5.  **Jogar**:
-    -   [cite_start]Pressione o botão `KEY1` na placa para iniciar o jogo. [cite: 1]
-    -   [cite_start]Pressione o botão `KEY0` para fazer o dinossauro pular. [cite: 1]
+    -   Pressione o botão `KEY1` na placa para iniciar o jogo. 
+    -   Pressione o botão `KEY0` para fazer o dinossauro pular. 
 
 ### 3.3. Limpando os Arquivos de Build
 
